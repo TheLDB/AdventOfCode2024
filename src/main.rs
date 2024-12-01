@@ -1,6 +1,6 @@
-use solutions::day_one::DayOne;
+use day_one::solution::DayOne;
 
-mod solutions;
+mod day_one;
 
 enum Days {
     One,
