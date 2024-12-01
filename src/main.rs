@@ -41,8 +41,8 @@ fn main() {
     
     match day {
         Days::One => {
-            let day_one_solution = DayOne::solution();
-            println!("Day One Solution: {:#?}", day_one_solution)
+            let _day_one_solution = DayOne::solution();
+            let _day_one_solution_p2 = DayOne::solution_p2();
         },
         Days::Two => {
 
@@ -135,6 +135,4 @@ fn main() {
 
         }
     }
-    println!("Hello, world!");
-
 }
