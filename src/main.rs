@@ -1,5 +1,6 @@
 mod utils;
 use day_one::solution::DayOne;
+use day_three::solution::DayThree;
 use day_two::solution::DayTwo;
 mod day_one;
 mod day_two;
@@ -79,7 +80,7 @@ impl std::fmt::Display for Days {
 }
 
 fn main() {
-    let day = Days::Two;
+    let day = Days::Three;
 
     match day {
         Days::One => {
@@ -90,7 +91,10 @@ fn main() {
             DayTwo::part_one();
             DayTwo::part_two();
         }
-        Days::Three => {}
+        Days::Three => {
+            DayThree::part_one();
+            DayThree::part_two();
+        }
         Days::Four => {}
         Days::Five => {}
         Days::Six => {}
