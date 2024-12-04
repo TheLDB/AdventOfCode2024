@@ -1,127 +1,42 @@
+mod solutions;
 mod utils;
-use day_one::solution::DayOne;
-use day_three::solution::DayThree;
-use day_two::solution::DayTwo;
-mod day_one;
-mod day_two;
-mod day_three;
 
-pub enum Days {
-    One,
-    Two,
-    Three,
-    Four,
-    Five,
-    Six,
-    Seven,
-    Eight,
-    Nine,
-    Ten,
-    Eleven,
-    Twelve,
-    Thirteen,
-    Fourteen,
-    Fifteen,
-    Sixteen,
-    Seventeen,
-    Eighteen,
-    Nineteen,
-    Twenty,
-    TwentyOne,
-    TwentyTwo,
-    TwentyThree,
-    TwentyFour,
-    TwentyFive,
-    TwentySix,
-    TwentySeven,
-    TwentyEight,
-    TwentyNine,
-    Thirty,
-    ThirtyOne,
-}
+use clap::Parser;
+use solutions::{day_1::solution::D1, day_2::solution::D2, day_3::solution::D3};
+use utils::runner::Runner;
 
-impl std::fmt::Display for Days {
-    fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
-        let day_str = match self {
-            Days::One => "day_one",
-            Days::Two => "day_two",
-            Days::Three => "day_three",
-            Days::Four => "day_four",
-            Days::Five => "day_five",
-            Days::Six => "day_six",
-            Days::Seven => "day_seven",
-            Days::Eight => "day_eight",
-            Days::Nine => "day_nine",
-            Days::Ten => "day_10",
-            Days::Eleven => "day_11",
-            Days::Twelve => "day_12",
-            Days::Thirteen => "day_13",
-            Days::Fourteen => "day_14",
-            Days::Fifteen => "day_15",
-            Days::Sixteen => "day_16",
-            Days::Seventeen => "day_17",
-            Days::Eighteen => "day_18",
-            Days::Nineteen => "day_19",
-            Days::Twenty => "day_20",
-            Days::TwentyOne => "day_21",
-            Days::TwentyTwo => "day_22",
-            Days::TwentyThree => "day_23",
-            Days::TwentyFour => "day_24",
-            Days::TwentyFive => "day_25",
-            Days::TwentySix => "day_26",
-            Days::TwentySeven => "day_27",
-            Days::TwentyEight => "day_28",
-            Days::TwentyNine => "day_29",
-            Days::Thirty => "day_30",
-            Days::ThirtyOne => "day_31",
-        };
-        write!(f, "{}", day_str)
-    }
+#[derive(Parser)]
+#[command(author, version, about, long_about = None)]
+struct Cli {
+    #[arg(short, long)]
+    day: Option<u8>,
 }
 
 fn main() {
-    let day = Days::Three;
+    let solutions: Vec<Box<dyn Runner>> = vec![Box::new(D1 {}), Box::new(D2 {}), Box::new(D3 {})];
 
-    match day {
-        Days::One => {
-            let _day_one_solution = DayOne::solution();
-            let _day_one_solution_p2 = DayOne::solution_p2();
-        }
-        Days::Two => {
-            DayTwo::part_one();
-            DayTwo::part_two();
-        }
-        Days::Three => {
-            DayThree::part_one();
-            DayThree::part_two();
-        }
-        Days::Four => {}
-        Days::Five => {}
-        Days::Six => {}
-        Days::Seven => {}
-        Days::Eight => {}
-        Days::Nine => {}
-        Days::Ten => {}
-        Days::Eleven => {}
-        Days::Twelve => {}
-        Days::Thirteen => {}
-        Days::Fourteen => {}
-        Days::Fifteen => {}
-        Days::Sixteen => {}
-        Days::Seventeen => {}
-        Days::Eighteen => {}
-        Days::Nineteen => {}
-        Days::Twenty => {}
-        Days::TwentyOne => {}
-        Days::TwentyTwo => {}
-        Days::TwentyThree => {}
-        Days::TwentyFour => {}
-        Days::TwentyFive => {}
-        Days::TwentySix => {}
-        Days::TwentySeven => {}
-        Days::TwentyEight => {}
-        Days::TwentyNine => {}
-        Days::Thirty => {}
-        Days::ThirtyOne => {}
+    let cli = Cli::parse();
+
+    let solution = match cli.day {
+        Some(day) => solutions
+            .iter()
+            .find(|s| s.name().1 == day.into())
+            .unwrap_or_else(|| panic!("Day {} not implemented!", day)),
+        None => solutions.last().unwrap(),
+    };
+
+    let (year, day) = solution.name();
+    println!("Running day {} ({})", day, year);
+
+    if let Some(ans) = solution.part_one() {
+        println!("Solution for part one: {}", ans);
+    } else {
+        println!("No solution for part one!");
+    }
+
+    if let Some(ans) = solution.part_two() {
+        println!("Solution for part two: {}", ans);
+    } else {
+        println!("No solution for part two!");
     }
 }
