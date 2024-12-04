@@ -2,7 +2,9 @@ mod solutions;
 mod utils;
 
 use clap::Parser;
-use solutions::{day_1::solution::D1, day_2::solution::D2, day_3::solution::D3};
+use solutions::{
+    day_1::solution::D1, day_2::solution::D2, day_3::solution::D3, day_4::solution::D4,
+};
 use utils::runner::Runner;
 
 #[derive(Parser)]
@@ -13,7 +15,12 @@ struct Cli {
 }
 
 fn main() {
-    let solutions: Vec<Box<dyn Runner>> = vec![Box::new(D1 {}), Box::new(D2 {}), Box::new(D3 {})];
+    let solutions: Vec<Box<dyn Runner>> = vec![
+        Box::new(D1 {}),
+        Box::new(D2 {}),
+        Box::new(D3 {}),
+        Box::new(D4 {}),
+    ];
 
     let cli = Cli::parse();
 
