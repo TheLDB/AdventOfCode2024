@@ -37,14 +37,20 @@ fn main() {
     let (year, day) = solution.name();
     println!("Running day {} ({})", day, year);
 
+    // Benchmark part one
+    let start = std::time::Instant::now();
     if let Some(ans) = solution.part_one() {
-        println!("Solution for part one: {}", ans);
+        let duration = start.elapsed();
+        println!("Solution for part one: {} (took {:?})", ans, duration);
     } else {
         println!("No solution for part one!");
     }
 
+    // Benchmark part two
+    let start = std::time::Instant::now();
     if let Some(ans) = solution.part_two() {
-        println!("Solution for part two: {}", ans);
+        let duration = start.elapsed();
+        println!("Solution for part two: {} (took {:?})", ans, duration);
     } else {
         println!("No solution for part two!");
     }

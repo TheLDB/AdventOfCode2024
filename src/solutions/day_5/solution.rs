@@ -74,28 +74,22 @@ impl Runner for D5 {
 
         let (rules, updates) = self.break_input(input);
 
-        let mut correct: Vec<Vec<usize>> = vec![];
-
         let mut sum: usize = 0;
 
         'update_loop: for update in updates {
-            // For each update, we need to take the first value, and start comparing it to the other values
-            //
+            let len = update.len();
 
-            for (index, value) in update.clone().into_iter().enumerate() {
-                for i in (index + 1)..update.len() {
-                    let cmp = self.compare_values(&(value, update[i]), &rules);
+            for i in 0..len-1 {
+                let cmp = self.compare_values(&(update[i], update[i+1]), &rules);
 
-                    if value != cmp.0 || update[i] != cmp.1 {
-                        continue 'update_loop;
-                    }
+                if update[i] != cmp.0 {
+                    continue 'update_loop;
                 }
             }
 
             let mid = update[update.len() / 2];
             sum += mid;
-            correct.push(update);
-        }
+        } 
 
         Some(sum)
     }
@@ -103,41 +97,35 @@ impl Runner for D5 {
     // ok so now we have to do the same, except we need to fix the not in order arrays, and only take the middle of those
     fn part_two(&self) -> Option<usize> {
         let input = self.load_input(false);
-
         let (rules, updates) = self.break_input(input);
-
-        let mut fixed: Vec<Vec<usize>> = vec![];
-
         let mut sum: usize = 0;
-
+    
         for update in &updates {
             let mut fixed_update = update.clone();
+            let len = fixed_update.len();
             let mut made_swap = true;
+            let mut passes = 0;
 
             while made_swap {
                 made_swap = false;
-                for index in 0..fixed_update.len() {
-                    for i in (index + 1)..fixed_update.len() {
-                        let cmp =
-                            self.compare_values(&(fixed_update[index], fixed_update[i]), &rules);
-
-                        // if the values sent are not the same ones received, we swap them and need to recheck the array
-                        if fixed_update[index] != cmp.0 || fixed_update[i] != cmp.1 {
-                            fixed_update.swap(index, i);
-                            made_swap = true;
-                        }
+                
+                for i in 0..len-1-passes {
+                    let cmp = self.compare_values(&(fixed_update[i], fixed_update[i + 1]), &rules);
+                    
+                    if fixed_update[i] != cmp.0 || fixed_update[i + 1] != cmp.1 {
+                        fixed_update.swap(i, i + 1);
+                        made_swap = true;
                     }
                 }
+                passes += 1;
             }
-
+    
             if fixed_update != *update {
                 let mid = fixed_update[fixed_update.len() / 2];
                 sum += mid;
             }
-
-            fixed.push(fixed_update);
         }
-
+    
         Some(sum)
     }
 }
