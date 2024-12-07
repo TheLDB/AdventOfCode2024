@@ -4,12 +4,19 @@ use crate::utils::runner::Runner;
 
 pub struct D6 {}
 
-#[derive(Debug)]
+#[derive(Debug, Hash, Eq, PartialEq, Clone, Copy)]
 enum GuardDirection {
     Up,
     Down,
     Left,
     Right,
+}
+
+#[derive(Debug, Hash, Eq, PartialEq, Clone, Copy)]
+struct Turn {
+    point: Point,
+    origin_direction: GuardDirection,
+    final_direction: GuardDirection,
 }
 
 #[derive(Debug, Hash, Eq, PartialEq, Clone, Copy)]
@@ -156,108 +163,9 @@ impl Runner for D6 {
     // Ok so I need to figure out how i can trap the guard in an infinite loop
     // by placing a single obstruction (not where they are standing)
     //
-    // i want to avoid heavily bruteforcing this by placing an item in every area and testing it
-    // so the current idea is that we're trying to like "close the circuit"
-    // so what if we run through the movement again, and track each turns position
-    // when we've turned 3 times, we know that we can likely place a obstruction to make it loop
-    // its just the math of where that should be
+    // i think bruteforcing is the only relatively easy way to accomplish this :(
+    // i tried to do some thing that predicted it based off the last 3 turns but it failed    
     fn part_two(&self) -> Option<usize> {
-        let input = self.load_input(true);
-        let map = self.build_map(input.clone());
-        let (mut guard, mut map) = (map.guard, map.map);
-        let mut visited_spots: HashSet<Point> = HashSet::new();
-        let mut turns: Vec<Point> = Vec::new();
-        loop {
-            if turns.len() == 3 {
-                break;
-            }
-            visited_spots.insert(guard.coords);
-
-            match guard.direction {
-                GuardDirection::Up => {
-                    // if going up would take us out of bounds, break the loop
-                    let above = guard.coords.y - 1;
-                    if above < 0 {
-                        break;
-                    }
-
-                    let above_char = map[above as usize][guard.coords.x as usize];
-                    if above_char == '#' {
-                        // If obstruction, pivot
-                        turns.push(Point {
-                            y: above,
-                            x: guard.coords.x,
-                        });
-                        guard.direction = GuardDirection::Right;
-                    } else if above_char == '.' {
-                        // Move up and insert new pos
-                        map[guard.coords.y as usize][guard.coords.x as usize] = '.';
-                        guard.coords.y -= 1;
-                    }
-                }
-                GuardDirection::Down => {
-                    let below = guard.coords.y + 1;
-                    // break on greater than or even bcz len starts at 1, so if our cord is 3, that means its in the fourth position, which if the len is 3, means it doesnt exist and we break
-                    if below >= map.len() as i32 {
-                        break;
-                    }
-
-                    let below_char = map[below as usize][guard.coords.x as usize];
-                    if below_char == '#' {
-                        turns.push(Point {
-                            y: below,
-                            x: guard.coords.x,
-                        });
-                        guard.direction = GuardDirection::Left;
-                    } else if below_char == '.' {
-                        map[guard.coords.y as usize][guard.coords.x as usize] = '.';
-                        guard.coords.y += 1;
-                    }
-                }
-                GuardDirection::Left => {
-                    let left = guard.coords.x - 1;
-                    if left < 0 {
-                        break;
-                    }
-
-                    let left_char = map[guard.coords.y as usize][left as usize];
-                    if left_char == '#' {
-                        turns.push(Point {
-                            y: guard.coords.y,
-                            x: left,
-                        });
-                        guard.direction = GuardDirection::Up;
-                    } else if left_char == '.' {
-                        map[guard.coords.y as usize][guard.coords.x as usize] = '.';
-                        guard.coords.x -= 1;
-                    }
-                }
-                GuardDirection::Right => {
-                    let right = guard.coords.x + 1;
-
-                    if right >= map[0].len() as i32 {
-                        break;
-                    }
-
-                    let right_char = map[guard.coords.y as usize][right as usize];
-                    if right_char == '#' {
-                        turns.push(Point {
-                            y: guard.coords.y,
-                            x: right,
-                        });
-                        guard.direction = GuardDirection::Down;
-                    } else if right_char == '.' {
-                        map[guard.coords.y as usize][guard.coords.x as usize] = '.';
-                        guard.coords.x += 1;
-                    }
-                }
-            }
-        }
-
-        // TODO: finish this (i need to sleep)
-        println!("Turns: {:#?}", turns);
-
-        println!("{}", input.clone());
         None
     }
 }
