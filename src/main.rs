@@ -4,7 +4,7 @@ mod utils;
 use clap::Parser;
 use solutions::{
     day_1::solution::D1, day_2::solution::D2, day_3::solution::D3, day_4::solution::D4,
-    day_5::solution::D5, day_6::solution::D6,
+    day_5::solution::D5, day_6::solution::D6, day_7::solution::D7,
 };
 use utils::runner::Runner;
 
@@ -23,6 +23,7 @@ fn main() {
         Box::new(D4 {}),
         Box::new(D5 {}),
         Box::new(D6 {}),
+        Box::new(D7 {}),
     ];
 
     let cli = Cli::parse();
