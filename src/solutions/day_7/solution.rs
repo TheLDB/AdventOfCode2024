@@ -1,5 +1,3 @@
-use std::ops::Mul;
-
 use crate::utils::runner::Runner;
 
 pub struct D7 {}

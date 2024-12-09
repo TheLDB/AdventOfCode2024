@@ -13,13 +13,6 @@ enum GuardDirection {
 }
 
 #[derive(Debug, Hash, Eq, PartialEq, Clone, Copy)]
-struct Turn {
-    point: Point,
-    origin_direction: GuardDirection,
-    final_direction: GuardDirection,
-}
-
-#[derive(Debug, Hash, Eq, PartialEq, Clone, Copy)]
 pub struct Point {
     pub x: i32,
     pub y: i32,
@@ -35,12 +28,6 @@ struct Guard {
 struct Map {
     guard: Guard,
     map: Vec<Vec<char>>,
-}
-
-#[derive(Debug, Hash, Eq, PartialEq, Clone, Copy)]
-struct State {
-    coords: Point,
-    direction: GuardDirection,
 }
 
 #[derive(Debug, Hash, Eq, PartialEq, Clone, Copy)]
@@ -82,7 +69,7 @@ impl D6 {
         }
     }
 
-    fn simulate_guard(&self, mut map: Map, obstruction: Point) -> bool {
+    fn simulate_guard(&self, map: Map, obstruction: Point) -> bool {
         let (mut guard, mut grid) = (map.guard, map.map);
         let mut obstruction_hits: HashSet<ObstructionHit> = HashSet::new();
         let max_steps = 20000;
