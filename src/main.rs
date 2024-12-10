@@ -5,6 +5,7 @@ use clap::Parser;
 use solutions::{
     day_1::solution::D1, day_2::solution::D2, day_3::solution::D3, day_4::solution::D4,
     day_5::solution::D5, day_6::solution::D6, day_7::solution::D7, day_8::solution::D8,
+    day_9::solution::D9,
 };
 use utils::runner::Runner;
 
@@ -25,6 +26,7 @@ fn main() {
         Box::new(D6 {}),
         Box::new(D7 {}),
         Box::new(D8 {}),
+        Box::new(D9 {}),
     ];
 
     let cli = Cli::parse();
